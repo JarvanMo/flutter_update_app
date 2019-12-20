@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -27,4 +28,22 @@ class UpdateApp {
   static String appName(String url) {
     return url.substring(url.lastIndexOf("/") + 1);
   }
+
+  static Future<CheckUpdateResult> checkUpdateInAppleStore(
+      String appleId) async {
+    if (!Platform.isIOS) {
+      return Future.value(CheckUpdateResult(false, null));
+    }
+    var result =
+        await _channel.invokeMethod("checkUpdate", {"appleId": appleId});
+    return Future.value(
+        CheckUpdateResult(result["hasUpdate"], result["version"]));
+  }
+}
+
+class CheckUpdateResult {
+  final bool hasUpdate;
+  final bool version;
+
+  CheckUpdateResult(this.hasUpdate, this.version);
 }
