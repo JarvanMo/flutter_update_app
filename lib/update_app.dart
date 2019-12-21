@@ -23,5 +23,8 @@ class UpdateApp {
     });
     return result;
   }
-
+  ///根据下载地址获取文件名称
+  static String appName(String url) {
+    return url.substring(url.lastIndexOf("/") + 1);
+  }
 }
